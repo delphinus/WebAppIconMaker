@@ -8,6 +8,7 @@ if ( -d '/home/dotcloud/') {
     $dbpath = File::Spec->catfile($basedir, 'db', 'deployment.db');
 }
 +{
+    app_url => 'http://waim.remora.cx',
     'DBI' => [
         "dbi:SQLite:dbname=$dbpath",
         '',
