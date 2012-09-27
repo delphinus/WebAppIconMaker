@@ -8,6 +8,7 @@
     </title>
     <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
     <link rel="stylesheet" href="[% static_file('/static/css/main.css') %]" />
+    <link rel="stylesheet" href="[% static_file('/static/css/app.css') %]" />
     <style>
       /* App custom styles */
     </style>

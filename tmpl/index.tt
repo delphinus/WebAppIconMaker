@@ -1,6 +1,6 @@
 [% WRAPPER 'include/layout.tt' %]
 
-[% INCLUDE 'page/top.tt' %]
 [% INCLUDE 'page/icon-maker.tt' %]
+[% INCLUDE 'page/usage.tt' %]
 
 [% END %][%# WRAPPER %]
