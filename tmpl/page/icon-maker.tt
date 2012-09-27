@@ -1,0 +1,89 @@
+<!-- Icon-Maker -->
+<div data-role="page" id="icon-maker">
+  <div id="waim-header" data-theme="a" data-role="header" data-position="fixed">
+    <h5>
+      アイコン作成
+    </h5>
+    <div data-role="navbar" data-iconpos="left">
+      <ul>
+        <li>
+          <a href="#icon-maker" data-theme="" data-icon="gear" class="ui-btn-active ui-state-persist">
+            作成
+          </a>
+        </li>
+        <li>
+          <a href="#usage" data-theme="" data-icon="home">
+            使い方
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div data-role="content">
+    <form action="[% uri_for('/getAddress') %]" method="get">
+      <div data-role="fieldcontain">
+        <label for="waim-site">
+          作成するサイトを選んでください
+        </label>
+        <select id="waim-site" data-native-menu="true" name="site" data-theme="b">
+          <option value="google-maps">
+            Google Maps
+          </option>
+          <option value="yahoo-maps">
+            Yahoo! ロコ 地図
+          </option>
+          <option value="custom">
+            カスタム……
+          </option>
+        </select>
+      </div>
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <label for="waim-site-url">
+            サイトのURL
+          </label>
+          <input name="site-url" id="waim-site-url" placeholder="URLを入れてください" value="http://" type="text" />
+        </fieldset>
+      </div>
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <label for="waim-use-icon">
+            アイコンの指定<br>（指定がなければ自動的に取得します）
+          </label>
+          <select name="toggleswitch1" id="waim-use-icon" data-theme="" data-role="slider">
+            <option value="off">
+              しない
+            </option>
+            <option value="on">
+              する
+            </option>
+          </select>
+        </fieldset>
+      </div>
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <label for="waim-icon-url">
+            アイコンのURL
+          </label>
+          <input name="icon-url" id="waim-icon-url" placeholder="URLを入れてください" value="http://" type="text" />
+        </fieldset>
+      </div>
+      <input id="waim-make" data-theme="b" data-icon="check" data-iconpos="left" value="作成する" type="submit" />
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <label for="waim-address">
+            作成されたアドレス
+          </label>
+          <textarea name="address" id="waim-address" placeholder="" />
+          </textarea>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+  <div data-theme="a" data-role="footer" data-position="">
+    <h3>
+      Footer
+    </h3>
+  </div>
+</div>
+

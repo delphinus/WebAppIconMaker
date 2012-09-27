@@ -1,0 +1,29 @@
+<!-- Usage -->
+<div data-role="page" id="usage">
+  <div id="waim-header" data-theme="a" data-role="header" data-position="fixed">
+    <h5>
+      アイコン作成
+    </h5>
+    <div data-role="navbar" data-iconpos="left">
+      <ul>
+        <li>
+          <a href="#icon-maker" data-theme="" data-icon="gear">
+            作成
+          </a>
+        </li>
+        <li>
+          <a href="#usage" data-theme="" data-icon="home" class="ui-btn-active ui-state-persist">
+            使い方
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div data-role="content">
+  </div>
+  <div data-theme="a" data-role="footer" data-position="">
+    <h3>
+      Footer
+    </h3>
+  </div>
+</div>

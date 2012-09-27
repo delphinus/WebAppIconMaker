@@ -8,6 +8,7 @@ if ( -d '/home/dotcloud/') {
     $dbpath = File::Spec->catfile($basedir, 'db', 'development.db');
 }
 +{
+    app_url => 'http://192.168.40.66:5000',
     'DBI' => [
         "dbi:SQLite:dbname=$dbpath",
         '',
