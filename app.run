@@ -5,6 +5,6 @@ PSGI=$DIR/app.psgi
 STARMAN=/Users/delphinus/perl5/perlbrew/perls/perl-5.14.1/bin/starman
 
 cd $DIR
-$STARMAN -l 127.0.0.1:18524 --pid $PID $PSGI
+$STARMAN -l 127.0.0.1:18525 --pid $PID $PSGI
 
 # vim:se ft=sh:
