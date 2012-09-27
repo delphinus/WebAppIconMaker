@@ -7,13 +7,13 @@
     <div data-role="navbar" data-iconpos="left">
       <ul>
         <li>
-          <a href="#top" data-theme="" data-icon="home">
-            トップ
+          <a href="#icon-maker" data-theme="" data-icon="gear" class="ui-btn-active ui-state-persist">
+            作成
           </a>
         </li>
         <li>
-          <a href="#icon-maker" data-theme="" data-icon="gear" class="ui-btn-active ui-state-persist">
-            作成
+          <a href="#usage" data-theme="" data-icon="home">
+            使い方
           </a>
         </li>
       </ul>
