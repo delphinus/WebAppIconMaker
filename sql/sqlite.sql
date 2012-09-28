@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS icons;
 
 CREATE TABLE icons (
     id VARCHAR(32) PRIMARY KEY
+    ,ext VARCHAR(255)
     ,content BLOB
     ,created_on INTEGER
 );

@@ -9,30 +9,57 @@ use Digest::MD5 qw!md5_hex!;
 use Encode;
 use JSON;
 use Log::Minimal;
-use LWP::Simple qw!!;
+use LWP::UserAgent;
 
 my $top = '';
-my %sites = (
-    'google-maps' => +{
-        icon_url => '/static/img/map.png',
-    },
-);
 
 any "$top/" => sub { my $c = shift;
     my %stash = (
         pages => [qw!top icon-maker!],
+        sites => $c->config->{sites},
     );
     $c->render('index.tt', \%stash);
 };
 
+get "$top/getUrl" => sub { my $c = shift;
+    my $p = $c->req->parameters;
+    my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
+    if ($site) {
+        $c->create_response(
+            200,
+            ['Content-Type' => 'application/json'],
+            encode(utf8 => to_json({result => $site->{site_url}})),
+        );
+    } else {
+        $c->res_404;
+    }
+};
+
 get "$top/getAddress" => sub { my $c = shift;
     my $p = $c->req->parameters;
-    my $icon_url = $p->{'icon-url'};
     my $site_url = $p->{'site-url'};
-    my $title = _get_title($c, $p->{'site-url'});
 
-    if ($sites{$p->{site}}) {
-        $icon_url = $c->config->{app_url} . $sites{$p->{site}}{icon_url};
+    my $title = _get_title($c, $site_url);
+
+    my $toggle_setting = $p->{'toggle-setting'};
+    my $use_icon = $p->{'use-icon'};
+    my $icon_url = '';
+    my $icon_compose = '';
+
+    my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
+    if ($site && $site->{icon_url}) {
+        $icon_url = $site->{icon_url};
+        $icon_url = $c->config->{app_url} . $icon_url
+            unless $icon_url =~ m!https?://!;
+    }
+
+    if ($toggle_setting eq 'on') {
+        if ($use_icon eq 'on' && $p->{'icon-url'} =~ m!^https?://!) {
+            $icon_url = $p->{icon_url};
+        }
+        if ($p->{'icon-compose'} eq 'off') {
+            $icon_compose = '-precomposed';
+        }
     }
 
     if (!$icon_url || $icon_url eq 'http://') {
@@ -42,7 +69,7 @@ get "$top/getAddress" => sub { my $c = shift;
 
     my $address = "data:text/html;charset=UTF-8,<title>$title</title>"
         . qq!<meta name="apple-mobile-web-app-capable" content="yes">!
-        . qq!<link rel="apple-touch-icon" href="$icon_url">!
+        . qq!<link rel="apple-touch-icon$icon_compose" href="$icon_url">!
         . qq!<script>if(window.navigator.standalone){!
         . qq!location.href="$site_url";}else{!
         . qq!document.write("ホーム画面に追加")}</script>!;
@@ -55,15 +82,15 @@ get "$top/getAddress" => sub { my $c = shift;
 };
 
 get "$top/img/{id}" => sub { my ($c, $args) = @_;
-    my ($data) = $c->dbh->selectrow_array(<<SQL, undef, $args->{id});
-        SELECT content FROM icons WHERE id = ?;
+    my ($ext, $data) = $c->dbh->selectrow_array(<<SQL, undef, $args->{id});
+        SELECT ext, content FROM icons WHERE id = ?;
 SQL
 
     if ($data) {
         $c->create_response(
             200,
             [
-                'Content-Type' => 'image/ico',
+                'Content-Type' => "image/$ext",
                 'Content-Length' => length $data,
             ],
             [$data],
@@ -76,8 +103,10 @@ SQL
 sub _get_title { my $c = shift;
     my $site_url = shift;
 
-    my $content = LWP::Simple::get($site_url);
-    my ($title) = $content =~ m!<title>([^<]+)</title>!;
+    my $ua = LWP::UserAgent->new(agent => 'AppleWebKit/536.26'
+        . ' (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25');
+    my $res = $ua->get($site_url);
+    my ($title) = $res->decoded_content =~ m!<title>([^<]+)</title>!;
 
     return $title;
 }
@@ -85,7 +114,47 @@ sub _get_title { my $c = shift;
 sub _get_favicon { my $c = shift;
     my $site_url = shift;
     my ($top_url) = $site_url =~ m!^(https?://[^/]+)!;
-    my $icon_url = "$top_url/favicon.ico";
+    my @icons = qw!
+        apple-touch-icon-precomposed.png
+        apple-touch-icon.png
+        favicon.ico
+    !;
+
+    my $ua = LWP::UserAgent->new(agent => 
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) '
+        . 'AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 '
+        . 'Mobile/10A405 Safari/8536.25');
+    my $res = $ua->get($site_url);
+    my $icon_url;
+    if ($res->content) {
+        my ($apple_touch_icon) = $res->content =~ m!
+            <link\s*rel="apple-touch-icon(?:-precomposed)?"[^>]*href="([^"]+)"
+        !x;
+        if ($apple_touch_icon) {
+            if ($apple_touch_icon =~ m!^https?://!) {
+                $icon_url = $apple_touch_icon;
+            } elsif ($apple_touch_icon =~ m!^//!) {
+                $icon_url = "http:$apple_touch_icon";
+            } elsif ($apple_touch_icon =~ m!^/!) {
+                $icon_url = "$top_url$apple_touch_icon";
+            } else {
+                ($icon_url = $site_url) =~ s![^/]+$!!;
+                $icon_url = "$icon_url$apple_touch_icon";
+            }
+        }
+    }
+    unless ($icon_url) {
+        for my $i (@icons) {
+            my $res = $ua->head("$top_url/$i");
+            if ($res->header('Content-Type') =~ /image/) {
+                $icon_url = "$top_url/$i";
+                last;
+            }
+        }
+    }
+    unless ($icon_url) {
+        return;
+    }
 
     my $md5 = md5_hex($icon_url);
 
@@ -94,14 +163,17 @@ sub _get_favicon { my $c = shift;
 SQL
 
     unless ($count) {
-        my $icon = LWP::Simple::get($icon_url);
+        my $res = $ua->get($icon_url);
+        my ($ext) = $icon_url =~ /[^.]+$/;
+
         my $sth = $c->dbh->prepare(<<SQL);
-            INSERT INTO icons VALUES (?, ?, ?);
+            INSERT INTO icons VALUES (?, ?, ?, ?);
 SQL
 
         $sth->bind_param(1, $md5, SQL_VARCHAR);
-        $sth->bind_param(2, $icon, SQL_BLOB);
-        $sth->bind_param(3, time, SQL_INTEGER);
+        $sth->bind_param(2, $ext, SQL_VARCHAR);
+        $sth->bind_param(3, $res->content, SQL_BLOB);
+        $sth->bind_param(4, time, SQL_INTEGER);
         $sth->execute;
     }
 
