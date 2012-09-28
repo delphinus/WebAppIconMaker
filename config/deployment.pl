@@ -1,5 +1,6 @@
 use File::Spec;
 use File::Basename qw(dirname);
+use YAML;
 my $basedir = File::Spec->rel2abs(File::Spec->catdir(dirname(__FILE__), '..'));
 my $sites = do {
     local $/;
