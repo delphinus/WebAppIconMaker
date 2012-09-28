@@ -1,0 +1,63 @@
+---
+-
+  value: google-maps
+  name: Google マップ
+  site_url: https://maps.google.co.jp/
+  icon_url: /static/img/googlemaps.png
+-
+  value: google-maps-touch
+  name: Google maps touch
+  site_url: http://knoa.jp/up/map/
+-
+  value: mapion-touch
+  name: Mapion Touch
+  site_url: http://www.mapion.co.jp/touch/
+-
+  value: navitime
+  name: NAVITIME
+  site_url: http://touch.navitime.co.jp/
+  icon_url: /static/img/navitime.png
+-
+  value: eki-tan
+  name: 駅探
+  site_url: http://lab.ekitan.com/touch/
+-
+  value: google-news
+  name: モバイルGoogleニュース
+  site_url: http://news.google.co.jp/news/i
+-
+  value: dekiru-net
+  name: できるネット＋
+  site_url: http://dekiru.impress.co.jp/i/
+-
+  value: google-translation
+  name: Google 翻訳
+  site_url: http://translate.google.co.jp/m/translate
+-
+  value: youtube
+  name: YouTube
+  site_url: http://m.youtube.com/
+-
+  value: ipeevee
+  name: iPeeVee
+  site_url: http://i.peevee.tv/video.jspx
+-
+  value: veoh
+  name: veoh
+  site_url: http://www.veoh.com/iphone/
+-
+  value: dailymotion
+  name: Dailymotion
+  site_url: http://iphone.dailymotion.com/jp
+-
+  value: woopie
+  name: Woopie
+  site_url: http://iphone.woopie.jp/
+-
+  value: vimeo
+  name: Vimeo
+  site_url: http://vimeo.com/m/
+-
+  value: sun
+  name: Sun
+  site_url: http://pattern.dk/sun/
