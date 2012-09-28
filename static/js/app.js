@@ -22,14 +22,30 @@ $('#icon-maker').live('pageinit', function(e, d){
     $('#waim-site').on('change', function(e) {
         var $target = $(e.target)
             ,name = $target.val()
-            ,data = sites[name]
         ;
 
-        if (data) {
-            $('#waim-site-url').val(data['site-url']);
-            $('#waim-icon-url').val(data['icon-url']);
+        if (name == 'custom') {
+            $('#waim-site-url').val('http://');
+        } else {
+            $.getJSON('/getUrl', {site: name}, function(data) {
+                $('#waim-site-url').val(data.result);
+            });
         }
     }).trigger('change');
+
+    $('#waim-toggle-setting').on('change', function(e) {
+        var $target = $(e.target);
+
+        if ($target.val() == 'off') {
+            $('#waim-detail-setting').fadeOut();
+        } else {
+            $('#waim-detail-setting').fadeIn();
+        }
+    });
+
+    window.setTimeout(function(){
+        $('#waim-detail-setting').hide();
+    }, 200);
 
     $('#waim-use-icon').on('change', function(e) {
         var $target = $(e.target);
@@ -46,13 +62,6 @@ $('#icon-maker').live('pageinit', function(e, d){
                 .fadeIn();
         }
     });
-
-    window.setTimeout(function(){
-            $('#waim-icon-url')
-                .addClass('ui-disabled')
-                .parentsUntil('div[data-role=fieldcontain]')
-                .fadeOut();
-    }, 200);
 
     $('#waim-make').on('click', function(e) {
         var url = $('form').attr('action')

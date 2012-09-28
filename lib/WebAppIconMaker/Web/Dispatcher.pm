@@ -12,27 +12,54 @@ use Log::Minimal;
 use LWP::UserAgent;
 
 my $top = '';
-my %sites = (
-    'google-maps' => +{
-        icon_url => '/static/img/map.png',
-    },
-);
 
 any "$top/" => sub { my $c = shift;
     my %stash = (
         pages => [qw!top icon-maker!],
+        sites => $c->config->{sites},
     );
     $c->render('index.tt', \%stash);
 };
 
+get "$top/getUrl" => sub { my $c = shift;
+    my $p = $c->req->parameters;
+    my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
+    if ($site) {
+        $c->create_response(
+            200,
+            ['Content-Type' => 'application/json'],
+            encode(utf8 => to_json({result => $site->{site_url}})),
+        );
+    } else {
+        $c->res_404;
+    }
+};
+
 get "$top/getAddress" => sub { my $c = shift;
     my $p = $c->req->parameters;
-    my $icon_url = $p->{'icon-url'};
     my $site_url = $p->{'site-url'};
-    my $title = _get_title($c, $p->{'site-url'});
 
-    if ($sites{$p->{site}}) {
-        $icon_url = $c->config->{app_url} . $sites{$p->{site}}{icon_url};
+    my $title = _get_title($c, $site_url);
+
+    my $toggle_setting = $p->{'toggle-setting'};
+    my $use_icon = $p->{'use-icon'};
+    my $icon_url = '';
+    my $icon_compose = '';
+
+    my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
+    if ($site && $site->{icon_url}) {
+        $icon_url = $site->{icon_url};
+        $icon_url = $c->config->{app_url} . $icon_url
+            unless $icon_url =~ m!https?://!;
+    }
+
+    if ($toggle_setting eq 'on') {
+        if ($use_icon eq 'on' && $p->{'icon-url'} =~ m!^https?://!) {
+            $icon_url = $p->{icon_url};
+        }
+        if ($p->{'icon-compose'} eq 'off') {
+            $icon_compose = '-precomposed';
+        }
     }
 
     if (!$icon_url || $icon_url eq 'http://') {
@@ -42,7 +69,7 @@ get "$top/getAddress" => sub { my $c = shift;
 
     my $address = "data:text/html;charset=UTF-8,<title>$title</title>"
         . qq!<meta name="apple-mobile-web-app-capable" content="yes">!
-        . qq!<link rel="apple-touch-icon" href="$icon_url">!
+        . qq!<link rel="apple-touch-icon$icon_compose" href="$icon_url">!
         . qq!<script>if(window.navigator.standalone){!
         . qq!location.href="$site_url";}else{!
         . qq!document.write("ホーム画面に追加")}</script>!;
@@ -101,14 +128,24 @@ sub _get_favicon { my $c = shift;
     my $icon_url;
     if ($res->content) {
         my ($apple_touch_icon) = $res->content =~ m!
-            <link\s*rel="apple-touch-icon"\s*href="([^"]+)"
+            <link\s*rel="apple-touch-icon(?:-precomposed)?"[^>]*href="([^"]+)"
         !x;
-        $icon_url = $apple_touch_icon if $apple_touch_icon;
+        if ($apple_touch_icon) {
+            if ($apple_touch_icon =~ m!^https?://!) {
+                $icon_url = $apple_touch_icon;
+            } elsif ($apple_touch_icon =~ m!^//!) {
+                $icon_url = "http:$apple_touch_icon";
+            } elsif ($apple_touch_icon =~ m!^/!) {
+                $icon_url = "$top_url$apple_touch_icon";
+            } else {
+                ($icon_url = $site_url) =~ s![^/]+$!!;
+                $icon_url = "$icon_url$apple_touch_icon";
+            }
+        }
     }
     unless ($icon_url) {
         for my $i (@icons) {
             my $res = $ua->head("$top_url/$i");
-            infof($res->header('Content-Type'));
             if ($res->header('Content-Type') =~ /image/) {
                 $icon_url = "$top_url/$i";
                 last;
@@ -118,7 +155,6 @@ sub _get_favicon { my $c = shift;
     unless ($icon_url) {
         return;
     }
-    infof($icon_url);
 
     my $md5 = md5_hex($icon_url);
 
