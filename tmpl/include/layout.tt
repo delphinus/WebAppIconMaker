@@ -22,7 +22,7 @@
     </script>
   </head>
   <body>
-    [% content %]
+[% content -%]
     <script>
       //App custom javascript
     </script>

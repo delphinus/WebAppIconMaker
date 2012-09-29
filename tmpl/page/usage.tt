@@ -1,29 +1,33 @@
-<!-- Usage -->
-<div data-role="page" id="usage">
-  <div id="waim-header" data-theme="a" data-role="header" data-position="fixed">
-    <h5>
-      アイコン作成
-    </h5>
-    <div data-role="navbar" data-iconpos="left">
-      <ul>
-        <li>
-          <a href="#icon-maker" data-theme="" data-icon="gear">
-            作成
-          </a>
-        </li>
-        <li>
-          <a href="#usage" data-theme="" data-icon="home" class="ui-btn-active ui-state-persist">
-            使い方
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div data-role="content">
-  </div>
-  <div data-theme="a" data-role="footer" data-position="">
-    <h3>
-      Footer
-    </h3>
-  </div>
-</div>
+[%- WRAPPER "include/page.tt" WITH title = "usage" -%]
+        <ul data-role="listview" data-divider-theme="b">
+          <li data-role="list-divider"><h1>はじめに</h1>
+          <li>
+            このツールを使うと、任意の Web サイトを全画面で起動し、
+            iPhone のアプリのように使えるアイコンをホーム画面に作成することが出来ます。
+            詳しくは、以下のサイトをお読みください。
+            <blockquote class="ui-widget">
+              iPhone で任意のサイトを全画面アプリにできるツールを作りました<br>
+              <a href="http://blog.remora.cx/2012/09/">http://</a>
+            </blockquote>
+          <li data-role="list-divider"><h1>作成方法</h1>
+          <li>リストからサイトの名前を選択するか、<strong>サイトの URL</strong>欄に任意のURL を入力してください。
+          <li><strong>作成</strong>ボタンをタップしてください。
+          <li><strong>リンクを開く</strong>ボタンが有効になるので、タップしてください。
+          <li>新しいウィンドウが開きます。画面下部のアイコンをタップし、<strong>ホーム画面に追加</strong>を選択します。
+          <li>作成するアイコンの名前を入力できます。
+          <li>ホーム画面にアイコンが出来ました。
+          <li data-role="list-divider"><h1>詳細設定</h1>
+          <li><h2>アイコンの指定</h2>
+            アイコンはツールが自動的に取得しますが、自分の好きなアイコンが使いたいときは URL を指定して使うことが出来ます。
+            手持ちのファイルが使いたい場合は、iPhone の制約上ファイルをアップロードすることは出来ませんので、
+            適当なサイトにアップロードした上でお使いください。</p>
+          <li><h2>アイコンを修飾する</h2>
+            標準ではアイコンの上部に明かりを当てたようなエフェクトがかかります。
+            これを使いたくない場合はチェックを外してください。
+          <li data-role="list-divider"><h1>作成者について</h1>
+            ブログやってます。最新情報はこちらで。
+            <blockquote>
+              blog.remora.cx<br>
+              <a href="http://blog.remora.cx/">http://blog.remora.cx/</a>
+            </blockquote>
+[%- END -%]
