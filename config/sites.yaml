@@ -5,12 +5,8 @@
   site_url: https://maps.google.co.jp/
   icon_url: /static/img/googlemaps.png
 -
-  value: google-maps-touch
-  name: Google maps touch
-  site_url: http://knoa.jp/up/map/
--
   value: mapion-touch
-  name: Mapion Touch
+  name: Mapion
   site_url: http://www.mapion.co.jp/touch/
 -
   value: navitime
@@ -22,17 +18,13 @@
   name: 駅探
   site_url: http://lab.ekitan.com/touch/
 -
-  value: google-news
-  name: モバイルGoogleニュース
-  site_url: http://news.google.co.jp/news/i
--
-  value: dekiru-net
-  name: できるネット＋
-  site_url: http://dekiru.impress.co.jp/i/
--
   value: google-translation
   name: Google 翻訳
   site_url: http://translate.google.co.jp/m/translate
+-
+  value: google-news
+  name: Google ニュース
+  site_url: http://news.google.co.jp/news/i
 -
   value: youtube
   name: YouTube
@@ -57,6 +49,10 @@
   value: vimeo
   name: Vimeo
   site_url: http://vimeo.com/m/
+-
+  value: dekiru-net
+  name: できるネット＋
+  site_url: http://dekiru.impress.co.jp/i/
 -
   value: sun
   name: Sun
