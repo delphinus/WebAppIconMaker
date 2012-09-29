@@ -5,6 +5,10 @@
   site_url: https://maps.google.co.jp/
   icon_url: /static/img/googlemaps.png
 -
+  value: yahoo-maps
+  name: Y! ロコ地図
+  site_url: http://maps.loco.yahoo.co.jp/
+-
   value: mapion-touch
   name: Mapion
   site_url: http://www.mapion.co.jp/touch/
