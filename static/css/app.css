@@ -1,0 +1,11 @@
+.ss {
+    display: block;
+    margin: 0 auto;
+}
+.explain li.with-img {
+    height: 160px;
+}
+.explain li.with-img img {
+    max-width: 90px;
+    max-height: 160px
+}

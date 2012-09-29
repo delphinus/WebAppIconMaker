@@ -1,33 +1,48 @@
 [%- WRAPPER "include/page.tt" WITH title = "usage" -%]
-        <ul data-role="listview" data-divider-theme="b">
-          <li data-role="list-divider"><h1>はじめに</h1>
-          <li>
-            このツールを使うと、任意の Web サイトを全画面で起動し、
+        <div data-role="collapsible-set" data-theme="b">
+          <div data-role="collapsible">
+            <h3>はじめに</h3>
+            <p>このツールを使うと、任意の Web サイトを全画面で起動し、
             iPhone のアプリのように使えるアイコンをホーム画面に作成することが出来ます。
-            詳しくは、以下のサイトをお読みください。
-            <blockquote class="ui-widget">
-              iPhone で任意のサイトを全画面アプリにできるツールを作りました<br>
-              <a href="http://blog.remora.cx/2012/09/">http://</a>
-            </blockquote>
-          <li data-role="list-divider"><h1>作成方法</h1>
-          <li>リストからサイトの名前を選択するか、<strong>サイトの URL</strong>欄に任意のURL を入力してください。
-          <li><strong>作成</strong>ボタンをタップしてください。
-          <li><strong>リンクを開く</strong>ボタンが有効になるので、タップしてください。
-          <li>新しいウィンドウが開きます。画面下部のアイコンをタップし、<strong>ホーム画面に追加</strong>を選択します。
-          <li>作成するアイコンの名前を入力できます。
-          <li>ホーム画面にアイコンが出来ました。
-          <li data-role="list-divider"><h1>詳細設定</h1>
-          <li><h2>アイコンの指定</h2>
-            アイコンはツールが自動的に取得しますが、自分の好きなアイコンが使いたいときは URL を指定して使うことが出来ます。
-            手持ちのファイルが使いたい場合は、iPhone の制約上ファイルをアップロードすることは出来ませんので、
-            適当なサイトにアップロードした上でお使いください。</p>
-          <li><h2>アイコンを修飾する</h2>
-            標準ではアイコンの上部に明かりを当てたようなエフェクトがかかります。
-            これを使いたくない場合はチェックを外してください。
-          <li data-role="list-divider"><h1>作成者について</h1>
-            ブログやってます。最新情報はこちらで。
+            <img class="ss" src="[% static_file('/static/img/IMG_2878.jpg') %]" width="180" height="320">
+          </div>
+          <div data-role="collapsible">
+            <h3>作成方法</h3>
+            <ul data-role="listview" data-divider-theme="e" class="explain">
+              <li class="with-img">リストからサイトの名前を選択するか、
+              <strong>サイトの URL</strong>欄に任意のURL を入力してください。
+              <img class="ss" src="[% static_file('/static/img/IMG_2880.jpg') %]" width="180" height="320">
+              <li class="with-img"><strong>作成</strong>ボタンをタップしてください。
+              <img class="ss" src="[% static_file('/static/img/IMG_2881.jpg') %]" width="180" height="320">
+              <li class="with-img"><strong>リンクを開く</strong>ボタンが有効になるので、タップしてください。
+              すると新しいウィンドウが開きます。画面下部のアイコンをタップし、
+              <strong>ホーム画面に追加</strong>を選択します。
+              <img class="ss" src="[% static_file('/static/img/IMG_2882.jpg') %]" width="180" height="320">
+              <li class="with-img">作成するアイコンの名前を入力できます。
+              <img class="ss" src="[% static_file('/static/img/IMG_2883.jpg') %]" width="180" height="320">
+              <li class="with-img">ホーム画面にアイコンが出来ました。
+              <img class="ss" src="[% static_file('/static/img/IMG_2884.jpg') %]" width="180" height="320">
+            </ul>
+          </div>
+          <div data-role="collapsible">
+            <h3>詳細設定</h3>
+            <ul data-role="listview" data-divider-theme="e" class="explain">
+              <li data-role="list-divider">アイコンの指定
+              <li class="with-img">アイコンはツールが自動的に取得しますが、
+              自分の好きなアイコンが使いたいときは URL を指定して使うことが出来ます。
+              <img class="ss" src="[% static_file('/static/img/IMG_2885.jpg') %]" width="180" height="320">
+              <li data-role="list-divider">アイコンを修飾する
+              <li>標準ではアイコンの上部に明かりを当てたようなエフェクトがかかります。
+              これを使いたくない場合はチェックを外してください。
+            </ul>
+          </div>
+          <div data-role="collapsible">
+            <h3>作成者について</h3>
+            <p>ブログやってます。最新情報はこちらで。</p>
             <blockquote>
               blog.remora.cx<br>
               <a href="http://blog.remora.cx/">http://blog.remora.cx/</a>
             </blockquote>
+          </div>
+        </div>
 [%- END -%]

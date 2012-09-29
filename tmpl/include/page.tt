@@ -26,7 +26,7 @@
       </div>
       <div data-theme="a" data-role="footer" data-position="">
         <h3>
-          Footer
+          <a target="_blank" href="blog.remora.cx">blog.remora.cx</a>
         </h3>
       </div>
     </div>
