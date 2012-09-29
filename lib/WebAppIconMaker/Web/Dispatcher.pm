@@ -39,18 +39,20 @@ get "$top/getAddress" => sub { my $c = shift;
     my $p = $c->req->parameters;
     my $site_url = $p->{'site-url'};
 
-    my $title = _get_title($c, $site_url);
-
     my $toggle_setting = $p->{'toggle-setting'};
     my $use_icon = $p->{'use-icon'};
     my $icon_url = '';
     my $icon_compose = '';
+    my $title;
 
     my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
     if ($site && $site->{icon_url}) {
         $icon_url = $site->{icon_url};
         $icon_url = $c->config->{app_url} . $icon_url
             unless $icon_url =~ m!https?://!;
+    }
+    if ($site && $site->{name}) {
+        $title = $site->{name};
     }
 
     if ($toggle_setting eq 'on') {
@@ -65,6 +67,10 @@ get "$top/getAddress" => sub { my $c = shift;
     if (!$icon_url || $icon_url eq 'http://') {
         my $md5 = _get_favicon($c, $site_url);
         $icon_url = $c->config->{app_url} . "/img/$md5";
+    }
+
+    if (!$title) {
+        $title = _get_title($c, $site_url);
     }
 
     my $address = "data:text/html;charset=UTF-8,<title>$title</title>"

@@ -1,6 +1,4 @@
-[% WRAPPER 'include/layout.tt' %]
-
-[% INCLUDE 'page/icon-maker.tt' %]
-[% INCLUDE 'page/usage.tt' %]
-
-[% END %][%# WRAPPER %]
+[%- WRAPPER "include/layout.tt" -%]
+[%- INCLUDE "page/icon-maker.tt" -%]
+[%- INCLUDE "page/usage.tt" -%]
+[%- END -%]
