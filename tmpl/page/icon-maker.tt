@@ -99,16 +99,10 @@
           </fieldset>
         </div>
       </div>
-      <input id="waim-make" data-theme="b" data-icon="check" data-iconpos="left" value="作成する" type="submit" />
-      <div data-role="fieldcontain">
-        <fieldset data-role="controlgroup">
-          <label for="waim-address">
-            作成されたアドレス
-          </label>
-          <textarea name="address" id="waim-address" placeholder="" />
-          </textarea>
-        </fieldset>
-      </div>
+      <button id="waim-make" data-theme="b" data-icon="check" data-iconpos="right">作成する</button>
+      <a id="waim-open" data-role="button" data-theme="b" href="#icon-maker" data-icon="forward" data-iconpos="right">
+        リンクを開く
+      </a>
     </form>
   </div>
   <div data-theme="a" data-role="footer" data-position="">
