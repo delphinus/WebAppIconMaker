@@ -37,3 +37,5 @@ builder {
         );
     WebAppIconMaker::Web->to_app();
 };
+
+# vim:se ft=perl:
