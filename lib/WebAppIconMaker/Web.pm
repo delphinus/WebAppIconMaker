@@ -23,6 +23,7 @@ use Text::Xslate;
         'module'   => [ 'Text::Xslate::Bridge::Star' ],
         'function' => {
             c => sub { Amon2->context() },
+            mode_name => sub { Amon2->context()->mode_name },
             uri_with => sub { Amon2->context()->req->uri_with(@_) },
             uri_for  => sub { Amon2->context()->uri_for(@_) },
             static_file => do {
