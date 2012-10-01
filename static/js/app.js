@@ -66,16 +66,17 @@ $('#icon-maker').live('pageinit', function(e, d){
 
     // 【作成実行】
     $('#waim-make').on('click', function(e) {
-        var url = $('form').attr('action')
-            ,param = $('form').serialize()
-        ;
+        var url = $('form').attr('action');
 
         $.mobile.showPageLoadingMsg();
         $('#waim-make').addClass('ui-disabled');
 
-        $.getJSON(url + '?' + param, function(data) {
+        $('#waim-form').upload('/getAddress', function(data) {
+            var decoded = data.result
+                .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+
             $('#waim-open')
-                .data('link', data.result)
+                .data('link', decoded)
                 .removeClass('ui-disabled');
             ;
 
@@ -85,7 +86,7 @@ $('#icon-maker').live('pageinit', function(e, d){
             window.alert('成功しました！'
                 + '【リンクを開く】をタップして新しいウィンドウを開いた後、'
                 + 'そのページを【ホーム画面に追加】してください。');
-        });
+        }, 'json');
 
         return false;
     });
