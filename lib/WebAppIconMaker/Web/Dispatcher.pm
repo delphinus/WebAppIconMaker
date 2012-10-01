@@ -10,6 +10,7 @@ use Encode;
 use JSON;
 use Log::Minimal;
 use LWP::UserAgent;
+use Path::Class;
 
 my $top = '';
 
@@ -35,7 +36,7 @@ get "$top/getUrl" => sub { my $c = shift;
     }
 };
 
-get "$top/getAddress" => sub { my $c = shift;
+post "$top/getAddress" => sub { my $c = shift;
     my $p = $c->req->parameters;
     my $site_url = $p->{'site-url'};
 
@@ -43,6 +44,7 @@ get "$top/getAddress" => sub { my $c = shift;
     my $use_icon = $p->{'use-icon'};
     my $icon_url = '';
     my $icon_compose = '';
+    my $icon_file = $c->req->upload('icon-file');
     my $title;
 
     my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
@@ -64,7 +66,10 @@ get "$top/getAddress" => sub { my $c = shift;
         }
     }
 
-    if (!$icon_url || $icon_url eq 'http://') {
+    if ($icon_file) {
+        my $md5 = _use_user_icon($c, $icon_file);
+        $icon_url = $c->config->{app_url} . "/img/$md5";
+    } elsif (!$icon_url || $icon_url eq 'http://') {
         my $md5 = _get_favicon($c, $site_url);
         $icon_url = $c->config->{app_url} . "/img/$md5";
     }
@@ -73,16 +78,17 @@ get "$top/getAddress" => sub { my $c = shift;
         $title = _get_title($c, $site_url);
     }
 
-    my $address = "data:text/html;charset=UTF-8,<title>$title</title>"
-        . qq!<meta name="apple-mobile-web-app-capable" content="yes">!
-        . qq!<link rel="apple-touch-icon$icon_compose" href="$icon_url">!
-        . qq!<script>if(window.navigator.standalone){!
+    my $address = "data:text/html;charset=UTF-8,&lt;title>$title&lt;/title>"
+        . qq!&lt;meta name="apple-mobile-web-app-capable" content="yes">!
+        . qq!&lt;link rel="apple-touch-icon$icon_compose" href="$icon_url">!
+        . qq!&lt;script>if(window.navigator.standalone){!
         . qq!location.href="$site_url";}else{!
-        . qq!document.write("ホーム画面に追加")}</script>!;
+        . qq!document.write("ホーム画面に追加")}&lt;/script>!;
 
     $c->create_response(
         200,
-        ['Content-type' => 'application/json'],
+        #['Content-type' => 'application/json'],
+        ['Content-type' => 'text/html; encoding="UTF-8"'],
         encode(utf8 => to_json({result => $address})),
     );
 };
@@ -185,5 +191,38 @@ SQL
 
     return $md5;
 }
+
+sub _use_user_icon { #{{{
+    my ($c, $icon_file) = @_;
+
+    my ($type) = $icon_file->content_type =~ m!image/(.+)!;
+    return unless $type;
+
+    my $data = do {
+        my $fh = file($icon_file->path)->openr;
+        binmode $fh;
+        local $/; <$fh>;
+    };
+
+    my $md5 = md5_hex($data);
+
+    my ($count) = $c->dbh->selectrow_array(<<SQL, undef, $md5);
+        SELECT COUNT(*) FROM icons WHERE id = ?
+SQL
+
+    unless ($count) {
+        my $sth = $c->dbh->prepare(<<SQL);
+            INSERT INTO icons VALUES (?, ?, ?, ?);
+SQL
+
+        $sth->bind_param(1, $md5, SQL_VARCHAR);
+        $sth->bind_param(2, $type, SQL_VARCHAR);
+        $sth->bind_param(3, $data, SQL_BLOB);
+        $sth->bind_param(4, time, SQL_INTEGER);
+        $sth->execute;
+    }
+
+    return $md5;
+} #}}}
 
 1;

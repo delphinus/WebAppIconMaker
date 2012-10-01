@@ -29,7 +29,8 @@
             <ul data-role="listview" data-divider-theme="e" class="explain">
               <li data-role="list-divider">アイコンの指定
               <li class="with-img">アイコンはツールが自動的に取得しますが、
-              自分の好きなアイコンが使いたいときは URL を指定して使うことが出来ます。
+              自分の好きなアイコンが使いたいときは URL を指定するか、
+              ファイルをアップロードして使うことが出来ます。（iOS6 のみ）
               <img class="ss" src="[% static_file('/static/img/IMG_2885.jpg') %]" width="180" height="320">
               <li data-role="list-divider">アイコンを修飾する
               <li>標準ではアイコンの上部に明かりを当てたようなエフェクトがかかります。
