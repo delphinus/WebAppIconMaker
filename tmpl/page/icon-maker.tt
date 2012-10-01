@@ -1,5 +1,5 @@
 [%- WRAPPER "include/page.tt" WITH title="icon-maker" -%]
-        <form action="[% uri_for('/getAddress') %]" method="get">
+        <div id="waim-form">
           <div data-role="fieldcontain">
             <label for="waim-site">
               作成するサイトを選んでください
@@ -60,6 +60,14 @@
             </div>
             <div data-role="fieldcontain">
               <fieldset data-role="controlgroup">
+                <label for="waim-icon-url">
+                  アイコンのアップロード
+                </label>
+                <input name="icon-file" id="waim-icon-file" type="file" />
+              </fieldset>
+            </div>
+            <div data-role="fieldcontain">
+              <fieldset data-role="controlgroup">
                 <label for="waim-icon-compose">
                   アイコンを修飾する
                 </label>
@@ -74,9 +82,9 @@
               </fieldset>
             </div>
           </div>
+        </div>
           <button id="waim-make" data-theme="b" data-icon="check" data-iconpos="right">作成する</button>
           <a id="waim-open" data-role="button" data-theme="b" href="#icon-maker" data-icon="forward" data-iconpos="right">
             リンクを開く
           </a>
-        </form>
 [%- END -%]

@@ -35,7 +35,7 @@ get "$top/getUrl" => sub { my $c = shift;
     }
 };
 
-post "$top/getAddress" => sub { my $c = shift;
+get "$top/getAddress" => sub { my $c = shift;
     my $p = $c->req->parameters;
     my $site_url = $p->{'site-url'};
 
@@ -43,7 +43,7 @@ post "$top/getAddress" => sub { my $c = shift;
     my $use_icon = $p->{'use-icon'};
     my $icon_url = '';
     my $icon_compose = '';
-    my $icon_file = $p->{'icon-file'};
+    my $icon_file = $p->{'icon-file]
     my $title;
 
     my ($site) = grep {$_->{value} eq $p->{site}} @{$c->config->{sites}};
@@ -65,10 +65,7 @@ post "$top/getAddress" => sub { my $c = shift;
         }
     }
 
-    if ($icon_file) {
-        my $md5 = _use_user_icon($c, $icon_file);
-        $icon_url = $c->config->{app_url} . "/img/$md5";
-    } elsif (!$icon_url || $icon_url eq 'http://') {
+    if (!$icon_url || $icon_url eq 'http://') {
         my $md5 = _get_favicon($c, $site_url);
         $icon_url = $c->config->{app_url} . "/img/$md5";
     }
@@ -84,7 +81,6 @@ post "$top/getAddress" => sub { my $c = shift;
         . qq!location.href="$site_url";}else{!
         . qq!document.write("ホーム画面に追加")}</script>!;
 
-    infof($address);
     $c->create_response(
         200,
         ['Content-type' => 'application/json'],
@@ -190,29 +186,5 @@ SQL
 
     return $md5;
 }
-
-sub _use_user_icon { #{{{
-    my ($c, $data) = @_;
-
-    my $md5 = md5_hex($data);
-
-    my ($count) = $c->dbh->selectrow_array(<<SQL, undef, $md5);
-        SELECT COUNT(*) FROM icons WHERE id = ?
-SQL
-
-    unless ($count) {
-        my $sth = $c->dbh->prepare(<<SQL);
-            INSERT INTO icons VALUES (?, ?, ?, ?);
-SQL
-
-        $sth->bind_param(1, $md5, SQL_VARCHAR);
-        $sth->bind_param(2, 'jpg', SQL_VARCHAR);
-        $sth->bind_param(3, $data, SQL_BLOB);
-        $sth->bind_param(4, time, SQL_INTEGER);
-        $sth->execute;
-    }
-
-    return $md5;
-} #}}}
 
 1;
